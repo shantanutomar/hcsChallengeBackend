@@ -8,7 +8,8 @@ const Task = db.Task;
 module.exports = {
   authenticateUser,
   createUser,
-  getAllUserTasks
+  getAllUserTasks,
+  getUserById
 };
 
 async function authenticateUser({ userName, password }) {
@@ -38,4 +39,8 @@ async function createUser(userParam) {
 async function getAllUserTasks(userParam) {
   console.log(userParam);
   return await Task.find({ userAssigned: userParam.userId });
+}
+
+async function getUserById(id) {
+  return await User.findById(id);
 }
