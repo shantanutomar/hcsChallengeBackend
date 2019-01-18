@@ -13,34 +13,28 @@ Authentiate User
 
 router.post("/", createTask);
 router.put("/:taskId", updateTask);
-router.delete("/:taskId", _deleteUserTask);
+router.delete("/:taskId", deleteUserTask);
 
 module.exports = router;
 
-function createUserTask(req, res, next) {
+function createTask(req, res, next) {
+  console.log(req);
   taskService
-    .create(req.body)
+    .createTask(req.params)
     .then(() => res.json({}))
     .catch(err => next(err));
 }
 
-// function getAllUserTasks(req, res, next) {
-//   userService
-//     .getAll()
-//     .then(users => res.json(users))
-//     .catch(err => next(err));
-// }
+function updateTask(req, res, next) {
+  taskService
+    .updateTask(req.params.taskId, req.body)
+    .then(tasks => res.json({ tasks }))
+    .catch(err => next(err));
+}
 
-// function updateUserTask(req, res, next) {
-//   userService
-//     .update(req.params.id, req.body)
-//     .then(() => res.json({}))
-//     .catch(err => next(err));
-// }
-
-// function _deleteUserTask(req, res, next) {
-//   userService
-//     .delete(req.params.id)
-//     .then(() => res.json({}))
-//     .catch(err => next(err));
-// }
+function deleteUserTask(req, res, next) {
+  taskService
+    .deleteUserTask(req.params.taskId)
+    .then(tasks => res.json({ tasks }))
+    .catch(err => next(err));
+}
