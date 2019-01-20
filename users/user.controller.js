@@ -24,7 +24,9 @@ function authenticateUser(req, res, next) {
 function createUser(req, res, next) {
   userService
     .createUser(req.body)
-    .then(user => res.json({ user }))
+    .then(user =>
+      res.status(200).json({ message: "User has been created", user })
+    )
     .catch(err => next(err));
 }
 

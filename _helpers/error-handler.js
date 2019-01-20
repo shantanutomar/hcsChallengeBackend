@@ -7,7 +7,7 @@ function errorHandler(err, req, res, next) {
     return res.status(400).json({ message: err });
   }
 
-  if (err.name === "userNameTaken") {
+  if (err.code === 11000) {
     return res.status(400).json({ message: "Username already exists" });
   }
 
@@ -18,7 +18,7 @@ function errorHandler(err, req, res, next) {
 
   if (err.name === "UnauthorizedError") {
     // jwt authentication error
-    return res.status(401).json({ message: "Invalid Token" });
+    return res.status(401).json({ message: "User not authorized" });
   }
 
   // default to 500 server error

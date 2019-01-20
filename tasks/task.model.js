@@ -9,7 +9,5 @@ const taskSchema = new Schema({
   taskCreatedOn: { type: Date, default: Date.now },
   taskDueDate: { type: Date, required: true }
 });
-
 taskSchema.set("toJSON", { virtuals: true });
-
 module.exports = mongoose.model("Task", taskSchema);
