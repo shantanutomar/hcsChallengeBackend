@@ -25,8 +25,6 @@ async function authenticateUser({ userName, password }) {
 }
 
 async function createUser(userParam) {
-  console.log("UserName is : " + userParam.userName);
-  console.log("Password is : " + userParam.password);
   if (await User.findOne({ username: userParam.userName })) {
     throw 'Username "' + userParam.userName + '" is already taken';
   }
@@ -36,13 +34,15 @@ async function createUser(userParam) {
     user.hashPassword = bcrypt.hashSync(userParam.password, 10);
   }
   await user.save();
+  return {
+    ...user
+  };
 }
 
 async function getAllUserTasks(userParam) {
   console.log(userParam);
   return await Task.find({ userAssigned: userParam.userId });
 }
-
 async function getUserById(id) {
   return await User.findById(id);
 }

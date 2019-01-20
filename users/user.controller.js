@@ -22,10 +22,9 @@ function authenticateUser(req, res, next) {
 }
 
 function createUser(req, res, next) {
-  // console.log(req.body);
   userService
     .createUser(req.body)
-    .then(() => res.json({}))
+    .then(user => res.json({ user }))
     .catch(err => next(err));
 }
 
