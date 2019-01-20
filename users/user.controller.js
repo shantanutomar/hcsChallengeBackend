@@ -22,6 +22,7 @@ function authenticateUser(req, res, next) {
 }
 
 function createUser(req, res, next) {
+  // console.log(req.body);
   userService
     .createUser(req.body)
     .then(() => res.json({}))
@@ -29,6 +30,7 @@ function createUser(req, res, next) {
 }
 
 function getAllUserTasks(req, res, next) {
+  console.log(req);
   userService
     .getAllUserTasks(req.params)
     .then(users => res.json(users))

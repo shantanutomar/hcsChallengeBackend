@@ -25,6 +25,8 @@ async function authenticateUser({ userName, password }) {
 }
 
 async function createUser(userParam) {
+  console.log("UserName is : " + userParam.userName);
+  console.log("Password is : " + userParam.password);
   if (await User.findOne({ username: userParam.userName })) {
     throw 'Username "' + userParam.userName + '" is already taken';
   }

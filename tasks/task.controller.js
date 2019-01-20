@@ -18,9 +18,9 @@ router.delete("/:taskId", deleteUserTask);
 module.exports = router;
 
 function createTask(req, res, next) {
-  console.log(req);
+  // console.log(req);
   taskService
-    .createTask(req.params)
+    .createTask(req.body)
     .then(() => res.json({}))
     .catch(err => next(err));
 }
