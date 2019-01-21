@@ -1,4 +1,8 @@
-﻿const config = require("config.json");
+﻿/*
+User service for user handling rests calls
+*/
+
+const config = require("config.json");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const db = require("_helpers/db");

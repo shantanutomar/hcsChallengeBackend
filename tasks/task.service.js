@@ -1,4 +1,7 @@
-const config = require("config.json");
+/*
+User service for task handling rests calls
+*/
+
 const db = require("_helpers/db");
 const Task = db.Task;
 const User = db.User;
@@ -28,7 +31,7 @@ async function updateTask(id, userParam) {
       overwrite: true
     },
     function(err) {
-      if (err) return err; //todo
+      if (err) return err;
     }
   );
 }
@@ -36,7 +39,7 @@ async function updateTask(id, userParam) {
 async function deleteUserTask(id) {
   return await Task.findByIdAndRemove(id, function(err) {
     if (err) {
-      return err; //todo
+      return err;
     }
   });
 }

@@ -1,3 +1,7 @@
+/*
+Modal for task handling
+*/
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const db = require("../_helpers/db");

@@ -1,4 +1,8 @@
-﻿require("rootpath")();
+﻿/*
+Main server.js file that boots up the server
+*/
+
+require("rootpath")();
 const express = require("express");
 const app = express();
 const cors = require("cors");

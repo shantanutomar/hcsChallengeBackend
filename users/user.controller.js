@@ -1,8 +1,11 @@
-﻿const express = require("express");
+﻿/*
+Controller for user handling rests calls
+*/
+
+const express = require("express");
 const router = express.Router();
 const userService = require("./user.service");
 
-// routes
 router.post("/authenticate", authenticateUser);
 router.post("/register", createUser);
 router.get("/:userId/tasks", getAllUserTasks);
@@ -20,7 +23,6 @@ function authenticateUser(req, res, next) {
     )
     .catch(err => next(err));
 }
-
 function createUser(req, res, next) {
   userService
     .createUser(req.body)
