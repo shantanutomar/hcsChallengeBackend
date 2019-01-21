@@ -1,7 +1,6 @@
 /*
 Error handling for different rest calls
 */
-
 module.exports = errorHandler;
 
 function errorHandler(err, req, res, next) {
