@@ -4,7 +4,6 @@ Error handling for different rest calls
 module.exports = errorHandler;
 
 function errorHandler(err, req, res, next) {
-  console.log(err);
   if (typeof err === "string") {
     return res.status(400).json({ message: err });
   }

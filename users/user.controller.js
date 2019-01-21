@@ -33,7 +33,6 @@ function createUser(req, res, next) {
 }
 
 function getAllUserTasks(req, res, next) {
-  console.log(req);
   userService
     .getAllUserTasks(req.params)
     .then(users => res.json(users))

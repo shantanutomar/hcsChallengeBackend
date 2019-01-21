@@ -22,7 +22,6 @@ async function createTask(userParam) {
 }
 
 async function updateTask(id, userParam) {
-  console.log(userParam);
   return await Task.findOneAndUpdate(
     { _id: id },
     userParam,

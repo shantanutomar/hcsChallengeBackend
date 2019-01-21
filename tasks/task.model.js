@@ -13,5 +13,7 @@ const taskSchema = new Schema({
   taskCreatedOn: { type: Date, default: Date.now },
   taskDueDate: { type: Date, required: true }
 });
+taskSchema.index({ userAssigned: 1 });
 taskSchema.set("toJSON", { virtuals: true });
+mongoose.model("Task", taskSchema).ensureIndexes();
 module.exports = mongoose.model("Task", taskSchema);
