@@ -2,28 +2,20 @@
 Validates JWT authentication
 */
 
-const expressJwt = require("express-jwt");
-const config = require("config.json");
-const userService = require("../users/user.service");
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const config = require("../config.json");
 
-module.exports = jwt;
-
-function jwt() {
-  const secret = config.secret;
-  console.log(secret);
-  return expressJwt({ secret, isRevoked }).unless({
-    path: [
-      // public routes that don't require authentication
-      "/users/authenticate",
-      "/users/register"
-    ]
-  });
-}
-
-async function isRevoked(req, payload, done) {
-  const user = await userService.getUserById(payload.sub);
-  if (!user) {
-    return done(null, true);
+module.exports = jwtAuth = (req, res, next) => {
+  if (req.path !== "/users/authenticate" && req.path !== "/users/register") {
+    const publicKEY = fs.readFileSync("_helpers/public.key", "utf8");
+    try {
+      var legit = jwt.verify(req.headers.authorization.slice(7), publicKEY, {
+        expiresIn: config.jwtTokenValidity,
+        algorithm: ["RS256"]
+      });
+    } catch (err) {
+      throw err;
+    }
   }
-  done();
-}
+};

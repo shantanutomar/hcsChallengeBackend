@@ -1,7 +1,8 @@
 ﻿/*
 User service for user handling rests calls
 */
-const config = require("config.json");
+const config = require("../config.json");
+const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const db = require("_helpers/db");
@@ -16,23 +17,28 @@ module.exports = {
 };
 
 async function authenticateUser({ userName, password }) {
+  const privateKEY = fs.readFileSync("_helpers/private.key", "utf8");
   const user = await User.findOne({ userName });
   if (user && bcrypt.compareSync(password, user.hashPassword)) {
     const { hash, ...userWithoutHash } = user.toObject();
-    const token = jwt.sign({ sub: user.id }, config.secret);
+    const token = jwt.sign({ sub: user._id }, privateKEY, {
+      expiresIn: config.jwtTokenValidity,
+      algorithm: "RS256"
+    });
     return {
       ...userWithoutHash,
       token
     };
+  } else {
+    throw "Username or Password is incorrect";
   }
 }
 
 async function createUser(userParam) {
-  if (await User.findOne({ username: userParam.userName })) {
-    throw 'Username "' + userParam.userName + '" is already taken';
+  if (await User.findOne({ userName: userParam.userName })) {
+    throw "User Name " + userParam.userName + " is already taken";
   }
   const user = new User(userParam);
-
   if (userParam.password) {
     user.hashPassword = bcrypt.hashSync(userParam.password, 10);
   }
