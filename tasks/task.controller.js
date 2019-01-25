@@ -22,15 +22,13 @@ function createTask(req, res, next) {
       console.log(
         "Create Task request took " + (moment.now() - req.requestTime + " ms")
       );
-      // console.log(task);
-      let tasks = {};
+      let tasks = [];
       redisClient.get("allTasks", (err, reply) => {
         if (err) throw err;
         else if (reply) {
-          console.log(JSON.parse(reply));
-          // tasks = { ...JSON.parse(reply), task };
-          // console.log(tasks);
-          // redisClient.set("allTasks", JSON.stringify(tasks));
+          tasks = JSON.parse(reply);
+          tasks.push(task);
+          redisClient.set("allTasks", JSON.stringify(tasks));
         }
       });
 
@@ -42,12 +40,20 @@ function createTask(req, res, next) {
 function updateTask(req, res, next) {
   taskService
     .updateTask(req.params.taskId, req.body)
-    .then(tasks => {
+    .then(task => {
       console.log(
         "Update Task request took " + (moment.now() - req.requestTime + " ms")
       );
-      // redisClient.set("allTasks", JSON.stringify(tasks));
-      res.json({ tasks });
+      console.log(task);
+      // redisClient.get("allTasks", (err, reply) => {
+      //   if (err) throw err;
+      //   else if (reply) {
+      //     tasks = JSON.parse(reply);
+      //     tasks.push(task);
+      //     redisClient.set("allTasks", JSON.stringify(tasks));
+      //   }
+
+      res.json({ task });
     })
     .catch(err => next(err));
 }
