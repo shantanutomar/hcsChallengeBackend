@@ -6,6 +6,9 @@ const express = require("express");
 const router = express.Router();
 const moment = require("moment");
 const userService = require("./user.service");
+const db = require("_helpers/db");
+const redisClient = db.redisClient;
+// const redis = require("redis");
 
 router.post("/authenticate", authenticateUser);
 router.post("/register", createUser);
@@ -39,16 +42,32 @@ function createUser(req, res, next) {
 }
 
 function getAllUserTasks(req, res, next) {
-  userService
-    .getAllUserTasks(req.params)
-    .then(tasks => {
+  // redisClient.del("allTasks");
+  redisClient.get("allTasks", (err, reply) => {
+    if (err) throw err;
+    else if (reply) {
       console.log(
-        "Fetch all user tasks request took " +
+        "Fetch all user tasks via cache took " +
           (moment.now() - req.requestTime + " ms")
       );
-      res.json(tasks);
-    })
-    .catch(err => next(err));
+      res.status(200).json(JSON.parse(reply));
+    } else {
+      userService
+        .getAllUserTasks(req.params)
+        .then(tasks => {
+          // tasks.map(ele => {
+          //   console.log("Each task is : " + ele);
+          // });
+          redisClient.set("allTasks", JSON.stringify(tasks));
+          console.log(
+            "Fetch all user tasks via mongoDB took " +
+              (moment.now() - req.requestTime + " ms")
+          );
+          res.status(200).json(tasks);
+        })
+        .catch(err => next(err));
+    }
+  });
 }
 
 function getUserById(req, res, next) {

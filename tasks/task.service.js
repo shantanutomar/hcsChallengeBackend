@@ -15,7 +15,7 @@ module.exports = {
 async function createTask(userParam) {
   if (await User.findOne({ _id: userParam.userAssigned })) {
     const task = new Task(userParam);
-    await task.save();
+    return await task.save();
   } else {
     throw "User does not exist";
   }
