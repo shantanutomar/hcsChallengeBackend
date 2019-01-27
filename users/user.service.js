@@ -48,8 +48,8 @@ async function createUser(userParam) {
   };
 }
 
-async function getAllUserTasks(userParam) {
-  return await Task.find({ userAssigned: userParam.userId })
+function getAllUserTasks(userParam) {
+  return Task.find({ userAssigned: userParam.userId })
     .lean()
     .sort({ taskDueDate: "asc" });
 }

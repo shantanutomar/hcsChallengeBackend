@@ -12,17 +12,17 @@ module.exports = {
   deleteUserTask
 };
 
-async function createTask(userParam) {
-  if (await User.findOne({ _id: userParam.userAssigned })) {
+function createTask(userParam) {
+  if (User.findOne({ _id: userParam.userAssigned })) {
     const task = new Task(userParam);
-    return await task.save();
+    return task.save();
   } else {
     throw "User does not exist";
   }
 }
 
-async function updateTask(id, userParam) {
-  return await Task.findOneAndUpdate(
+function updateTask(id, userParam) {
+  return Task.findOneAndUpdate(
     { _id: id },
     userParam,
     {
@@ -35,10 +35,6 @@ async function updateTask(id, userParam) {
   );
 }
 
-async function deleteUserTask(id) {
-  return await Task.findByIdAndRemove(id, function(err) {
-    if (err) {
-      return err;
-    }
-  });
+function deleteUserTask(id) {
+  return Task.findByIdAndRemove(id);
 }

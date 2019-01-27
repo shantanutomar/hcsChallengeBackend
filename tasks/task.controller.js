@@ -22,19 +22,22 @@ function createTask(req, res, next) {
       console.log(
         "Create Task request took " + (moment.now() - req.requestTime + " ms")
       );
-      let tasks = [];
       redisClient.get("allTasks", (err, reply) => {
-        if (err) throw err;
-        else if (reply) {
-          tasks = JSON.parse(reply);
+        if (err) {
+          redisClient.del("allTasks");
+          next(err);
+        } else if (reply) {
+          let tasks = JSON.parse(reply);
           tasks.push(task);
           redisClient.set("allTasks", JSON.stringify(tasks));
+          res.json({});
         }
       });
-
-      res.json({});
     })
-    .catch(err => next(err));
+    .catch(err => {
+      redisClient.del("allTasks");
+      next(err);
+    });
 }
 
 function updateTask(req, res, next) {
@@ -44,29 +47,52 @@ function updateTask(req, res, next) {
       console.log(
         "Update Task request took " + (moment.now() - req.requestTime + " ms")
       );
-      console.log(task);
-      // redisClient.get("allTasks", (err, reply) => {
-      //   if (err) throw err;
-      //   else if (reply) {
-      //     tasks = JSON.parse(reply);
-      //     tasks.push(task);
-      //     redisClient.set("allTasks", JSON.stringify(tasks));
-      //   }
-
-      res.json({ task });
+      redisClient.get("allTasks", (err, reply) => {
+        if (err) {
+          redisClient.del("allTasks");
+          next(err);
+        } else if (reply) {
+          tasks = JSON.parse(reply);
+          tasks.forEach((ele, index) => {
+            if (ele._id.toString() === task._id.toString()) {
+              tasks[index] = task;
+            }
+          });
+          redisClient.set("allTasks", JSON.stringify(tasks));
+          res.json({ task });
+        }
+      });
     })
-    .catch(err => next(err));
+    .catch(err => {
+      redisClient.del("allTasks");
+      next(err);
+    });
 }
 
 function deleteUserTask(req, res, next) {
   taskService
     .deleteUserTask(req.params.taskId)
-    .then(tasks => {
+    .then(task => {
       console.log(
         "Delete task request took " + (moment.now() - req.requestTime + " ms")
       );
-      // redisClient.set("allTasks", JSON.stringify(tasks));
-      res.json({ tasks });
+      redisClient.get("allTasks", (err, reply) => {
+        if (err) {
+          redisClient.del("allTasks");
+          next(err);
+        } else if (reply) {
+          tasks = JSON.parse(reply);
+          let indx = tasks.findIndex(ele => {
+            return ele._id.toString() === task._id.toString();
+          });
+          tasks.splice(indx, 1);
+          redisClient.set("allTasks", JSON.stringify(tasks));
+          res.json({ task });
+        }
+      });
     })
-    .catch(err => next(err));
+    .catch(err => {
+      redisClient.del("allTasks");
+      next(err);
+    });
 }

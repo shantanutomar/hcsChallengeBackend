@@ -8,7 +8,6 @@ const moment = require("moment");
 const userService = require("./user.service");
 const db = require("_helpers/db");
 const redisClient = db.redisClient;
-// const redis = require("redis");
 
 router.post("/authenticate", authenticateUser);
 router.post("/register", createUser);
@@ -24,6 +23,7 @@ function authenticateUser(req, res, next) {
       console.log(
         "Login user request took " + (moment.now() - req.requestTime + " ms")
       );
+      redisClient.del("allTasks");
       res.json(user);
     })
     .catch(err => next(err));
@@ -42,10 +42,11 @@ function createUser(req, res, next) {
 }
 
 function getAllUserTasks(req, res, next) {
-  // redisClient.del("allTasks");
   redisClient.get("allTasks", (err, reply) => {
-    if (err) throw err;
-    else if (reply) {
+    if (err) {
+      redisClient.del("allTasks");
+      next(err);
+    } else if (reply) {
       console.log(
         "Fetch all user tasks via cache took " +
           (moment.now() - req.requestTime + " ms")
@@ -55,9 +56,6 @@ function getAllUserTasks(req, res, next) {
       userService
         .getAllUserTasks(req.params)
         .then(tasks => {
-          // tasks.map(ele => {
-          //   console.log("Each task is : " + ele);
-          // });
           redisClient.set("allTasks", JSON.stringify(tasks));
           console.log(
             "Fetch all user tasks via mongoDB took " +
@@ -65,7 +63,10 @@ function getAllUserTasks(req, res, next) {
           );
           res.status(200).json(tasks);
         })
-        .catch(err => next(err));
+        .catch(err => {
+          redisClient.del("allTasks");
+          next(err);
+        });
     }
   });
 }

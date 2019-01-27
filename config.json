@@ -1,4 +1,4 @@
 ﻿{
   "connectionString": "mongodb://admin:admin11@ds159634.mlab.com:59634/usersdetailsdatabase",
-  "jwtTokenValidity": 27000
+  "jwtTokenValidity": 900
 }
