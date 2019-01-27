@@ -22,17 +22,27 @@ function createTask(req, res, next) {
       console.log(
         "Create Task request took " + (moment.now() - req.requestTime + " ms")
       );
-      redisClient.get("allTasks", (err, reply) => {
-        if (err) {
-          redisClient.del("allTasks");
-          next(err);
-        } else if (reply) {
-          let tasks = JSON.parse(reply);
-          tasks.push(task);
-          redisClient.set("allTasks", JSON.stringify(tasks));
-          res.json({});
-        }
-      });
+      /** Caching Approach 1 - When any CUD operation takes place delete the redis key and
+       * return the response so that on next fetch operation data is fetched from DB itself instead of cache
+       */
+      redisClient.del("allTasks");
+      res.json({});
+
+      /** Caching Approach 2 (Commented below)- When any CUD operation takes place update the cache
+       * accordingly with the updated data so that on next fetch data is returned from
+       * cache itself rather querying from DB
+       */
+      // redisClient.get("allTasks", (err, reply) => {
+      //   if (err) {
+      //     redisClient.del("allTasks");
+      //     next(err);
+      //   } else if (reply) {
+      //     let tasks = JSON.parse(reply);
+      //     tasks.push(task);
+      //     redisClient.set("allTasks", JSON.stringify(tasks));
+      //     res.json({});
+      //   }
+      // });
     })
     .catch(err => {
       redisClient.del("allTasks");
@@ -47,21 +57,31 @@ function updateTask(req, res, next) {
       console.log(
         "Update Task request took " + (moment.now() - req.requestTime + " ms")
       );
-      redisClient.get("allTasks", (err, reply) => {
-        if (err) {
-          redisClient.del("allTasks");
-          next(err);
-        } else if (reply) {
-          tasks = JSON.parse(reply);
-          tasks.forEach((ele, index) => {
-            if (ele._id.toString() === task._id.toString()) {
-              tasks[index] = task;
-            }
-          });
-          redisClient.set("allTasks", JSON.stringify(tasks));
-          res.json({ task });
-        }
-      });
+      /** Caching Approach 1 - When any CUD operation takes place delete the redis key and
+       * return the response so that on next fetch operation data is fetched from DB itself instead of cache
+       */
+      redisClient.del("allTasks");
+      res.json({ task });
+
+      /** Caching Approach 2 (Commented below)- When any CUD operation takes place update the cache
+       * accordingly with the updated data so that on next fetch data is returned from
+       * cache itself rather querying from DB
+       */
+      // redisClient.get("allTasks", (err, reply) => {
+      //   if (err) {
+      //     redisClient.del("allTasks");
+      //     next(err);
+      //   } else if (reply) {
+      //     tasks = JSON.parse(reply);
+      //     tasks.forEach((ele, index) => {
+      //       if (ele._id.toString() === task._id.toString()) {
+      //         tasks[index] = task;
+      //       }
+      //     });
+      //     redisClient.set("allTasks", JSON.stringify(tasks));
+      //     res.json({ task });
+      //   }
+      // });
     })
     .catch(err => {
       redisClient.del("allTasks");
@@ -76,20 +96,31 @@ function deleteUserTask(req, res, next) {
       console.log(
         "Delete task request took " + (moment.now() - req.requestTime + " ms")
       );
-      redisClient.get("allTasks", (err, reply) => {
-        if (err) {
-          redisClient.del("allTasks");
-          next(err);
-        } else if (reply) {
-          tasks = JSON.parse(reply);
-          let indx = tasks.findIndex(ele => {
-            return ele._id.toString() === task._id.toString();
-          });
-          tasks.splice(indx, 1);
-          redisClient.set("allTasks", JSON.stringify(tasks));
-          res.json({ task });
-        }
-      });
+
+      /** Caching Approach 1 - When any CUD operation takes place delete the redis key and
+       * return the response so that on next fetch operation data is fetched from DB itself instead of cache
+       */
+      redisClient.del("allTasks");
+      res.json({ task });
+
+      /** Caching Approach 2 (Commented below)- When any CUD operation takes place update the cache
+       * accordingly with the updated data so that on next fetch data is returned from
+       * cache itself rather querying from DB
+       */
+      // redisClient.get("allTasks", (err, reply) => {
+      //   if (err) {
+      //     redisClient.del("allTasks");
+      //     next(err);
+      //   } else if (reply) {
+      //     tasks = JSON.parse(reply);
+      //     let indx = tasks.findIndex(ele => {
+      //       return ele._id.toString() === task._id.toString();
+      //     });
+      //     tasks.splice(indx, 1);
+      //     redisClient.set("allTasks", JSON.stringify(tasks));
+      //     res.json({ task });
+      //   }
+      // });
     })
     .catch(err => {
       redisClient.del("allTasks");
