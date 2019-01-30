@@ -17,15 +17,14 @@ mongoose.connect(
     }
   }
 );
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
+// console.log(mongoose.Promise);
 
 const redisConnect = () => {
-  var client = redis.createClient(
-    17951,
-    "redis-17951.c1.ap-southeast-1-1.ec2.cloud.redislabs.com",
-    { no_ready_check: true }
-  );
-  client.auth("FD5JDX93iiJjl5bEOCimDSIFhBW9DQgY", function(err) {
+  var client = redis.createClient(config.redisPort, config.redisHost, {
+    no_ready_check: true
+  });
+  client.auth(config.redisPassword, function(err) {
     if (err) {
       console.log("Redis connection issue: " + err);
       throw err;
