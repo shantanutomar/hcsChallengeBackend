@@ -37,6 +37,11 @@ app.use("/tasks", require("./tasks/task.controller"));
 // global error handler
 app.use(errorHandler);
 
+console.log(process.env.AWS_PORT);
+console.log(process.env.DEV_PORT);
+console.log(process.env.NODE_ENV);
+console.log(process.env.MONGO_DB_CONN_STRING);
+
 // start server
 // Port can be changed to config.awsPort for aws deployments
 const port =
