@@ -1,6 +1,15 @@
 ﻿/*
 Main server.js file that boots up the server
 */
+require("dotenv").config();
+
+// try {
+//   require("dotenv").config();
+// } catch {
+//   console.error();
+//   return;
+// }
+
 require("rootpath")();
 const express = require("express");
 const app = express();
@@ -9,7 +18,6 @@ const moment = require("moment");
 const bodyParser = require("body-parser");
 const jwt = require("_helpers/jwt");
 const errorHandler = require("_helpers/error-handler");
-const config = require("config.json");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -33,8 +41,8 @@ app.use(errorHandler);
 // Port can be changed to config.awsPort for aws deployments
 const port =
   process.env.NODE_ENV === "production"
-    ? process.env.PORT || 80
-    : config.devPort;
+    ? process.env.AWS_PORT
+    : process.env.DEV_PORT;
 const server = app.listen(port, function() {
   console.log("Server listening on port " + port);
 });

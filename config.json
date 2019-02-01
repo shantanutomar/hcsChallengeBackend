@@ -1,9 +1,3 @@
 ﻿{
-  "connectionString": "mongodb://admin:admin11@ds159634.mlab.com:59634/usersdetailsdatabase",
-  "jwtTokenValidity": 900,
-  "redisPort": 17951,
-  "redisHost": "redis-17951.c1.ap-southeast-1-1.ec2.cloud.redislabs.com",
-  "redisPassword": "FD5JDX93iiJjl5bEOCimDSIFhBW9DQgY",
-  "devPort": 4000,
-  "awsPort": 8081
+  "jwtTokenValidity": 900
 }

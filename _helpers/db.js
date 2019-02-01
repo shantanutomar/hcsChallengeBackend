@@ -1,13 +1,12 @@
 /*
 DB config file with mongoDB. 
 */
-const config = require("config.json");
 const mongoose = require("mongoose");
 var redis = require("redis");
 
-mongoose.connect(process.env.MONGODB_URI || config.connectionString);
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_DB_CONN_STRING);
 mongoose.connect(
-  process.env.MONGODB_URI || config.connectionString,
+  process.env.MONGODB_URI || process.env.MONGO_DB_CONN_STRING,
   function(err) {
     if (err) {
       console.log("mongoDB connection issue: " + err);
@@ -17,14 +16,16 @@ mongoose.connect(
     }
   }
 );
-// mongoose.Promise = global.Promise;
-// console.log(mongoose.Promise);
 
 const redisConnect = () => {
-  var client = redis.createClient(config.redisPort, config.redisHost, {
-    no_ready_check: true
-  });
-  client.auth(config.redisPassword, function(err) {
+  var client = redis.createClient(
+    process.env.REDIS_PORT,
+    process.env.REDIS_HOST,
+    {
+      no_ready_check: true
+    }
+  );
+  client.auth(process.env.REDIS_PASS, function(err) {
     if (err) {
       console.log("Redis connection issue: " + err);
       throw err;
