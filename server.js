@@ -1,14 +1,8 @@
 ﻿/*
 Main server.js file that boots up the server
 */
+/* Include .env file before starting local server */
 require("dotenv").config();
-
-// try {
-//   require("dotenv").config();
-// } catch {
-//   console.error();
-//   return;
-// }
 
 require("rootpath")();
 const express = require("express");
@@ -36,11 +30,6 @@ app.use("/tasks", require("./tasks/task.controller"));
 
 // global error handler
 app.use(errorHandler);
-
-console.log(process.env.AWS_PORT);
-console.log(process.env.DEV_PORT);
-console.log(process.env.NODE_ENV);
-console.log(process.env.MONGO_DB_CONN_STRING);
 
 // start server
 // Port can be changed to config.awsPort for aws deployments
