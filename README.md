@@ -1,8 +1,10 @@
-# HealthCareSystems - Tasks App
+# Tasks Planner - Backend
 
 This application allows a user to add new tasks, see and update existing tasks. This requires a user to login as an exisiting user or register to the application if he/she is a new user.
 
 The application consists of web client made in React along with a Express based API server. The server interacts with data layer in form of a MongoDB instance running on mLab (using a database cloud provider for the sake of simplicity).
+
+The project demo can be seen here-> https://youtu.be/jXQmJWDFD54
 
 ### Setting Up and Running
 
