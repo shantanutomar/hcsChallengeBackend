@@ -11,7 +11,7 @@ const userSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   userAge: { type: Number, required: true },
-  userDetails: { type: String, required: true },
+  userDetails: { type: String, required: false },
   userCreatedOn: { type: Date, default: Date.now }
 });
 
