@@ -4,7 +4,7 @@ This application allows a user to add new tasks, see and update existing tasks. 
 
 The application consists of web client made in React along with a Express based API server. The server interacts with data layer in form of a MongoDB instance running on mLab (using a database cloud provider for the sake of simplicity).
 
-The project demo can be seen here-> https://youtu.be/jXQmJWDFD54
+The project demo can be seen here-> https://youtu.be/Wmh8t4urQCI
 
 ### Setting Up and Running
 
